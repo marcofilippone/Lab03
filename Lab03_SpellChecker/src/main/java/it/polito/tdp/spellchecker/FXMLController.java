@@ -44,25 +44,32 @@ public class FXMLController {
 
     @FXML
     void handleCheck(ActionEvent event) {
+    	long timei = System.currentTimeMillis();
+    	int contaErr = 0;
     	String lang = comboLanguage.getValue();
     	if(lang==null) {
     		txtWords.setText("Errore! Selezionare una lingua");
     		return;
     	}
     	String input = txtInput.getText().toLowerCase();
-    	input.replaceAll("[.,\\/#!$%\\?^&\\*;:{}=\\-_`~()\\[\\]\"]+", "");
+    	input = input.replaceAll("[.,\\/#!$%\\?^&\\*;:{}=\\-_`~()\\[\\]\"]", "");
     	String[] arr = input.split(" ");
     	for(int i=0; i<arr.length; i++) {
     		if(!this.model.esiste(arr[i], lang)) {
     			txtWords.appendText(arr[i]+"\n");
+    			contaErr++;
     		}
     	}
+    	lblErrors.setText("The text contains "+contaErr+" errors");
+    	lblTime.setText("Spell check completed in "+((long) (System.currentTimeMillis()-timei))+" milliseconds");
     }
 
     @FXML
     void handleClear(ActionEvent event) {
     	txtInput.clear();
     	txtWords.clear();
+    	lblErrors.setText("");
+    	lblTime.setText("");
     }
 
     @FXML
